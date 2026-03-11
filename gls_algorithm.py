@@ -1,7 +1,11 @@
+from models.graph import Graph
 from models.solution import Solution
+from vertex_descent_algohrithm import local_search_vertex_descent
 
-def genetic_local_search(graph, colors, population_size, descent_cycles, ils=False):
+def genetic_local_search(graph: Graph, colors: int, population_size: int, descent_cycles: int, ils: bool = False):
     
+    best_solution = None
+
     # Create population of random solutions (colorings)
     population = []
     for _ in range(population_size):
@@ -14,6 +18,9 @@ def genetic_local_search(graph, colors, population_size, descent_cycles, ils=Fal
         # Create 1 child via Crossover (GPX)
 
         # Local search on that child (vertex descent)
+
+        new_solution = local_search_vertex_descent(solution)
+        new_solution.graph.update_vertices_grouped_by_color()
 
         # Update population (replace worst if offspring is better or equal)
 

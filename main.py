@@ -1,4 +1,5 @@
 from models.graph import Graph 
+from gls_algorithm import genetic_local_search
 
 def main():
     print("Select experiment:")
@@ -20,7 +21,7 @@ def main():
         colors = 28
         population_size = 50
         descent_cycles = 100
-        print("TODO")
+        genetic_local_search(graph, colors, population_size, descent_cycles)
 
     if choice == "2":
         graph = Graph("data/flat300_26_0.col")
