@@ -8,7 +8,7 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
 
     while improved:
         improved = False
-        vertices_list_copy = create_copy_of_vertices(solution.graph.vertices)
+        vertices_list_copy = create_copy_of_vertices(solution.graph.vertices) # Is het nodig om een kopie te maken van de vertices? We kunnen toch gewoon de kleuren aanpassen en daarna weer terug zetten als het niet beter is?
         random.shuffle(vertices_list_copy)
         total_conflicts = 0
 
@@ -30,6 +30,7 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
 
             total_conflicts += vertex.amount_of_conflicts
 
+        # Volgensmij kan het simpeler naar een =< check, want we willen ook bij gelijke de nieuwe oplossing kiezen, dacht dat het zo in de opdracht stond.
         if total_conflicts < solution.conflicts_amount:
             solution.conflicts_amount = total_conflicts
             solution.graph.vertices = vertices_list_copy
@@ -43,7 +44,7 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
 
 
 def get_color_with_minimal_conflicts(vertex: Vertex, num_colors: int) -> tuple[int, int]:
-    min_conflicts: int = sys.maxsize
+    min_conflicts: int = sys.maxsize # Moet dit niet een initiele waarde hebben?
     best_colors = []
 
     for color in range(1, num_colors + 1):
