@@ -12,7 +12,7 @@ class Solution:
     def create_random_solution(self):
         pass
 
-    def calculate_fitness(self)  -> int:
+    def calculate_penalty(self)  -> int:
         total = 0
         for vertex in self.graph.vertices:
             total += vertex.amount_of_conflicts
