@@ -8,6 +8,12 @@ class Graph:
         self.vertices_grouped_by_color: dict[int, list[int]] = {}
         self.load_graph()
 
+    def __init__(self, vertices: list[Vertex], vertices_grouped_by_color: dict[int, list[int]]):
+        self.file_path = ""
+        self.edges = []
+        self.vertices: list[Vertex] = vertices
+        self.vertices_grouped_by_color: dict[int, list[int]] = vertices_grouped_by_color
+
     def load_graph(self):
         vertex_dict: dict[int, Vertex] = {}
         with open(self.file_path, 'r') as f:

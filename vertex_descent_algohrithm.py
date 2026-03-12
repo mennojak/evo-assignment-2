@@ -2,6 +2,7 @@ from models.solution import Solution
 from models.graph import Vertex
 import random
 import sys
+from utils import create_copy_of_vertices
 
 def local_search_vertex_descent(solution: Solution) -> Solution:
     improved = True
@@ -66,14 +67,3 @@ def check_amount_conflicts(vertex: Vertex, color: int) -> int:
         if color != -1 and neighbor.color == color:
             conflict_amount += 1
     return conflict_amount
-
-def create_copy_of_vertices(vertices: list[Vertex]) -> list[Vertex]:
-    vertices_copy_dict = {v.id: Vertex(v.id, v.color) for v in vertices}
-
-    for vertice in vertices:
-        copy_vertice = vertices_copy_dict[vertice.id]
-        for vertex_neighbor in vertice.neighbors:
-            copy_neighbor = vertices_copy_dict[vertex_neighbor.id]
-            copy_vertice.neighbors.add(copy_neighbor)
-
-    return list(vertices_copy_dict.values())
