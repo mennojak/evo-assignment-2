@@ -17,14 +17,13 @@ class Solution:
 
         self.update_conflicts_amount()
         self.graph.update_vertices_grouped_by_color()
-        self.calculate_penalty()
 
     def calculate_penalty(self)  -> int:
         total = 0
         for vertex in self.graph.vertices:
             total += vertex.amount_of_conflicts
-        self.conflicts_amount = total
-        return total
+        self.conflicts_amount = total / 2
+        return self.conflicts_amount
     
     def update_conflicts_amount(self):
         self.conflicts_amount = 0
@@ -34,3 +33,4 @@ class Solution:
                 if vertex.color != -1 and neighbor.color == vertex.color:
                     vertex.amount_of_conflicts += 1
             self.conflicts_amount += vertex.amount_of_conflicts
+        self.conflicts_amount = self.conflicts_amount / 2
