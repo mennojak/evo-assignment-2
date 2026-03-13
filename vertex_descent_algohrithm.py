@@ -17,7 +17,7 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
 
             # randomize color for vertex if its color is not set
             if(vertex.color == -1):
-                vertex.color = random.randint(1, solution.colors)
+                vertex.color = random.randint(1, solution.colors -1)
                 continue
 
             current_color_conflict_amount = check_amount_conflicts(vertex, vertex.color)
@@ -49,7 +49,7 @@ def get_color_with_minimal_conflicts(vertex: Vertex, num_colors: int) -> tuple[i
     min_conflicts: int = sys.maxsize
     best_colors = []
 
-    for color in range(1, num_colors + 1):
+    for color in range(0, num_colors):
         conflict_amount = check_amount_conflicts(vertex, color)
         if conflict_amount < min_conflicts:
             min_conflicts = conflict_amount

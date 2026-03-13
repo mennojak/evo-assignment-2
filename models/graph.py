@@ -26,7 +26,7 @@ class Graph:
 
         for color, vertex_ids in vertices_grouped_by_color.items():
             for vertex_id in vertex_ids:
-                vertex = self.vertices[vertex_id - 1]
+                vertex = next(v for v in vertices if v.id == vertex_id)
                 vertex.color = color
 
     def load_graph(self):

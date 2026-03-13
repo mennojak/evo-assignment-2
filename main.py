@@ -1,5 +1,6 @@
 from models.graph import Graph 
 from gls_algorithm import genetic_local_search
+from evaluation import EvaluationResult
 
 def main():
     print("Select experiment:")
@@ -23,7 +24,9 @@ def main():
         colors = 28
         population_size = 50
         descent_cycles = 100
-        genetic_local_search(graph, colors, population_size, descent_cycles)
+        best_solution, generation_results = genetic_local_search(graph, colors, population_size, descent_cycles)
+        evaluation = EvaluationResult(generation_results)
+        evaluation.plot()
 
     # not used for report
     if choice == "2":
