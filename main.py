@@ -16,36 +16,43 @@ def main():
 
     choice = input("Enter 1-9: ")
 
+    # not used for report
     if choice == "1":
-        graph = Graph("data/flat300_26_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat300_26_0.col")
         colors = 28
         population_size = 50
         descent_cycles = 100
         genetic_local_search(graph, colors, population_size, descent_cycles)
 
+    # not used for report
     if choice == "2":
-        graph = Graph("data/flat300_26_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat300_26_0.col")
         colors = 26
         population_size = 50
         descent_cycles = 100
         print("TODO")
     
     if choice == "3":
-        graph = Graph("data/flat1000_76_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat1000_76_0.col")
         colors = 100
         population_size = 50
         descent_cycles = 100
         print("TODO")
 
     if choice == "4":
-        graph = Graph("data/flat1000_76_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat1000_76_0.col")
         colors = 83
         population_size = 50
         descent_cycles = 100
         print("TODO")
     
     if choice == "5":
-        graph = Graph("data/flat300_26_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat300_26_0.col")
         colors = 26
         population_size = int(input("Choose population size: "))
         descent_cycles = int(input("Choose descent cycles: "))
@@ -53,14 +60,16 @@ def main():
         print("TODO")
     
     if choice == "6":
-        graph = Graph("data/flat1000_76_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat1000_76_0.col")
         colors = 83
         population_size = 50
         descent_cycles = 100
         print("TODO")
 
     if choice == "7":
-        graph = Graph("data/flat300_26_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat300_26_0.col")
         colors = 26
         population_size = int(input("Choose population size: "))
         descent_cycles = int(input("Choose descent cycles: "))
@@ -68,7 +77,8 @@ def main():
         print("TODO")
 
     if choice == "8":
-        graph = Graph("data/flat1000_76_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat1000_76_0.col")
         colors = 83
         population_size = 50
         descent_cycles = 100
@@ -77,8 +87,10 @@ def main():
 
     if choice == "9":
         # TBD
-        graph = Graph("data/flat300_26_0.col")
-        # graph = Graph("data/flat1000_76_0.col")
+        graph = Graph()
+        graph.create_from_file("data/flat300_26_0.col")
+        # graph = Graph()
+        # graph.create_from_file("data/flat1000_76_0.col")
         colors = 26
         # colors = 83
         population_size = 0

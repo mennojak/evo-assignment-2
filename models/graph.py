@@ -1,18 +1,33 @@
+from random import random
+
 from models.vertex import Vertex
 
+# dictionary keeps track of color order with key, list does only with its own index, so dictionary is safer to use.
 class Graph:
-    def __init__(self, file_path: str):
+
+    def __init__(self):
+        self.file_path: str = ""
+        self.edges: list[tuple[int, int]] = []
+        self.vertices: list[Vertex] = []
+        self.vertices_grouped_by_color: dict[int, list[int]] = {}
+    
+    def create_from_file(self, file_path: str):
         self.file_path = file_path
         self.edges = []
         self.vertices: list[Vertex] = []
         self.vertices_grouped_by_color: dict[int, list[int]] = {}
         self.load_graph()
 
-    def __init__(self, vertices: list[Vertex], vertices_grouped_by_color: dict[int, list[int]]):
+    def create_from_vertices(self, vertices: list[Vertex], vertices_grouped_by_color: dict[int, list[int]]):
         self.file_path = ""
         self.edges = []
         self.vertices: list[Vertex] = vertices
         self.vertices_grouped_by_color: dict[int, list[int]] = vertices_grouped_by_color
+
+        for color, vertex_ids in vertices_grouped_by_color.items():
+            for vertex_id in vertex_ids:
+                vertex = self.vertices[vertex_id - 1]
+                vertex.color = color
 
     def load_graph(self):
         vertex_dict: dict[int, Vertex] = {}
