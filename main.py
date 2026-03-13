@@ -23,7 +23,7 @@ def main():
         graph.create_from_file("data/flat300_26_0.col")
         colors = 28
         population_size = 50
-        descent_cycles = 10
+        descent_cycles = 100
         best_solution, generation_results = genetic_local_search(graph, colors, population_size, descent_cycles)
         evaluation = EvaluationResult(generation_results)
         evaluation.plot()

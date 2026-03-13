@@ -5,10 +5,8 @@ import sys
 from utils import create_copy_of_vertices
 
 def local_search_vertex_descent(solution: Solution) -> Solution:
-    improved = True
 
-    while improved:
-        improved = False
+    while True:
         vertices_list_copy = create_copy_of_vertices(solution.graph.vertices)
         random.shuffle(vertices_list_copy)
         total_conflicts = 0
@@ -36,11 +34,11 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
         if total_conflicts < solution.calculate_penalty():
             solution.conflicts_amount = total_conflicts
             solution.graph.vertices = vertices_list_copy
-            improved = True
+            break
         elif total_conflicts == solution.conflicts_amount and random.random() < 0.5:
             solution.conflicts_amount = total_conflicts
             solution.graph.vertices = vertices_list_copy
-            improved = True
+            break
 
     return solution
 

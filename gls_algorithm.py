@@ -8,7 +8,7 @@ from utils import copy_graph_vertices_grouped_by_color, create_copy_of_vertices
 from evaluation import GenerationResult
 import random
 
-def genetic_local_search(graph: Graph, colors: int, population_size: int, descent_cycles: int = 100, max_generations: int = 10) -> tuple[Solution, list[GenerationResult]]:
+def genetic_local_search(graph: Graph, colors: int, population_size: int, descent_cycles: int = 100, max_generations: int = 1000) -> tuple[Solution, list[GenerationResult]]:
     
     best_solution = None
     generation_results: list[GenerationResult] = []
