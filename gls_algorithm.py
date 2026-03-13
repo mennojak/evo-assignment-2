@@ -44,6 +44,8 @@ def genetic_local_search(graph: Graph, colors: int, population_size: int, descen
 
         best_solution = min(population, key=lambda s: s.conflicts_amount)
 
+        print("best solution: " + str(best_solution.conflicts_amount))
+
     return best_solution, generation_results
 
 def greedy_partitioning_crossover(parent1: Solution, parent2: Solution) -> Solution:
