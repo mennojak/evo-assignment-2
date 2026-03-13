@@ -22,7 +22,7 @@ class Solution:
         total = 0
         for vertex in self.graph.vertices:
             total += vertex.amount_of_conflicts
-        self.conflicts_amount = total / 2
+        self.conflicts_amount = total
         return self.conflicts_amount
     
     def update_conflicts_amount(self):
@@ -33,4 +33,4 @@ class Solution:
                 if vertex.color != -1 and neighbor.color == vertex.color:
                     vertex.amount_of_conflicts += 1
             self.conflicts_amount += vertex.amount_of_conflicts
-        self.conflicts_amount = self.conflicts_amount / 2
+        self.conflicts_amount = self.conflicts_amount

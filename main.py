@@ -1,3 +1,4 @@
+import time
 from models.graph import Graph 
 from gls_algorithm import genetic_local_search
 from evaluation import EvaluationResult
@@ -19,12 +20,12 @@ def main():
 
     # not used for report
     if choice == "1":
-        graph = Graph()
-        graph.create_from_file("data/flat300_26_0.col")
         colors = 28
         population_size = 50
         descent_cycles = 100
-        best_solution, generation_results = genetic_local_search(graph, colors, population_size, descent_cycles)
+        print("start time:", time.ctime())
+        best_solution, generation_results = genetic_local_search("data/flat300_26_0.col", colors, population_size, descent_cycles)
+        print("end time:", time.ctime())
         evaluation = EvaluationResult(generation_results)
         evaluation.plot()
 
