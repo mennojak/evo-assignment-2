@@ -16,6 +16,8 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
             if vertex.color == -1:
                 vertex.color = random.randint(0, solution.colors - 1)
                 continue
+            if vertex.amount_of_conflicts == 0:
+                continue
 
             current_conflicts = check_amount_conflicts(vertex, vertex.color)
             best_color, best_conflicts = get_color_with_minimal_conflicts(vertex, solution.colors)
