@@ -1,5 +1,5 @@
 import random
-import time
+
 from models.graph import Graph
 from models.solution import Solution
 from models.vertex import Vertex
@@ -14,14 +14,15 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
     generation_results: list[GenerationResult] = []
 
     population = []
-    graph = Graph()
-    graph.create_from_file(graph_name)
     for _ in range(population_size):
+        graph = Graph()
+        graph.create_from_file(graph_name)
         solution = Solution(graph, colors, create_random=True)
         population.append(solution)
 
-    start_time = time.time()
+
     for generation in range(max_generations):
+
         if best_solution and optimal_solution_found(best_solution):
             break
 
