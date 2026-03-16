@@ -54,7 +54,6 @@ class Graph:
                     self.edges.append((v1_id, v2_id))
 
         self.vertices = list(vertex_dict.values())
-        print(f"Loaded graph from {self.file_path} with {len(self.vertices)} vertices and {len(self.edges)} edges")
 
 
     def update_vertices_grouped_by_color(self):

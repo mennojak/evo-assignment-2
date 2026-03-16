@@ -23,10 +23,12 @@ def main():
         colors = 28
         population_size = 50
         descent_cycles = 100
-        print("start time:", time.ctime())
+        start_time = time.time()
         best_solution, generation_results = genetic_local_search("data/flat300_26_0.col", colors, population_size, descent_cycles)
-        print("end time:", time.ctime())
-        evaluation = EvaluationResult(generation_results)
+        print("Best solution conflicts:", best_solution.conflicts_amount)
+        print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
+        print(f"Amount of generations: {len(generation_results)}")
+        evaluation = EvaluationResult(generation_results, 1, colors, population_size, descent_cycles)
         evaluation.plot()
 
     # not used for report

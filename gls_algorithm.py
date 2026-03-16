@@ -20,9 +20,12 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
         solution = Solution(graph, colors, create_random=True)
         population.append(solution)
 
+    print("----------------------------------")
+    print(f"Initial population created with {population_size} solutions - Vertices: {len(population[0].graph.vertices)} - Edges: {len(population[0].graph.edges)}")
+    print("Starting genetic local search, displaying progress every 100 generations...")
+    print("----------------------------------")
 
     for generation in range(max_generations):
-
         if best_solution and optimal_solution_found(best_solution):
             break
 
@@ -32,9 +35,20 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
         child = greedy_partitioning_crossover(parent1, parent2)
 
         # Vertex descent
-        for _ in range(descent_cycles):
+        # descent_cycles_ran = 0
+        for i in range(descent_cycles):
+            # descent_cycles_ran += 1
+            conflicts_before = child.conflicts_amount
+
             child = local_search_vertex_descent(child)
-            child.graph.update_vertices_grouped_by_color()
+            # child.graph.update_vertices_grouped_by_color()
+
+            conflicts_after = child.conflicts_amount
+
+            if conflicts_after >= conflicts_before:
+                break
+
+        # print(f"Generation {generation}: Ran {descent_cycles_ran} descent cycles.")
 
         worst_solution: Solution = max(population, key=lambda s: s.conflicts_amount)
         if child.conflicts_amount <= worst_solution.conflicts_amount:
@@ -46,7 +60,8 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
 
         best_solution = min(population, key=lambda s: s.conflicts_amount)
 
-        print("best solution: " + str(best_solution.conflicts_amount))
+        if generation % 100 == 0:
+            print(f"Generation: {generation} - Best solution: {best_solution.conflicts_amount} - Average solution: {generation_result.average_penalty}")
 
     return best_solution, generation_results
 
