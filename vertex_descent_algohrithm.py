@@ -5,20 +5,17 @@ import sys
 
 
 def local_search_vertex_descent(solution: Solution) -> Solution:
-    vertices = solution.graph.vertices
+
+    vertices = [v for v in solution.graph.vertices if v.amount_of_conflicts > 0]
+
     while True:
         color_snapshot: dict[int, int] = {v.id: v.color for v in vertices}
 
         random.shuffle(vertices)
-        total_conflicts = 0
+        old_total_conflicts = 0
+        new_total_conflicts = 0
 
         for vertex in vertices:
-            if vertex.color == -1:
-                vertex.color = random.randint(0, solution.colors - 1)
-                continue
-            if vertex.amount_of_conflicts == 0:
-                continue
-
             current_conflicts = check_amount_conflicts(vertex, vertex.color)
             best_color, best_conflicts = get_color_with_minimal_conflicts(vertex, solution.colors)
 
@@ -30,20 +27,18 @@ def local_search_vertex_descent(solution: Solution) -> Solution:
             else:
                 vertex.amount_of_conflicts = current_conflicts
 
-            total_conflicts += vertex.amount_of_conflicts
+            old_total_conflicts += current_conflicts
+            new_total_conflicts += vertex.amount_of_conflicts
 
-        current_penalty = solution.conflicts_amount
-
-        if total_conflicts <= current_penalty:
-            solution.conflicts_amount = total_conflicts
+        if new_total_conflicts < old_total_conflicts:
+            solution.conflicts_amount = new_total_conflicts
             break
-        elif total_conflicts == current_penalty and random.random() < 0.5:
-            solution.conflicts_amount = total_conflicts
+        elif new_total_conflicts == old_total_conflicts and random.random() < 0.5:
+            solution.conflicts_amount = new_total_conflicts
             break
         else:
             for v in vertices:
                 v.color = color_snapshot[v.id]
-            break
 
     return solution
 
@@ -64,6 +59,4 @@ def get_color_with_minimal_conflicts(vertex: Vertex, num_colors: int) -> tuple[i
 
 
 def check_amount_conflicts(vertex: Vertex, color: int) -> int:
-    if color == -1:
-        return 0
     return sum(0.5 for neighbor in vertex.neighbors if neighbor.color == color)
