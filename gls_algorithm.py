@@ -8,7 +8,7 @@ from utils import copy_graph_vertices_grouped_by_color, create_copy_of_vertices
 from evaluation import GenerationResult
 import random
 
-def genetic_local_search(graph_name: str, colors: int, population_size: int, descent_cycles: int = 100, max_generations: int = 1000) -> tuple[Solution, list[GenerationResult]]:
+def genetic_local_search(graph_name: str, colors: int, population_size: int, descent_cycles: int = 100, max_generations: int = 10000) -> tuple[Solution, list[GenerationResult]]:
     
     best_solution = None
     generation_results: list[GenerationResult] = []
@@ -35,20 +35,7 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
         child = greedy_partitioning_crossover(parent1, parent2)
 
         # Vertex descent
-        # descent_cycles_ran = 0
-        for i in range(descent_cycles):
-            # descent_cycles_ran += 1
-            conflicts_before = child.conflicts_amount
-
-            child = local_search_vertex_descent(child)
-            # child.graph.update_vertices_grouped_by_color()
-
-            conflicts_after = child.conflicts_amount
-
-            if conflicts_after >= conflicts_before:
-                break
-
-        # print(f"Generation {generation}: Ran {descent_cycles_ran} descent cycles.")
+        child = local_search_vertex_descent(child, descent_cycles)
 
         worst_solution: Solution = max(population, key=lambda s: s.conflicts_amount)
         if child.conflicts_amount <= worst_solution.conflicts_amount:

@@ -20,7 +20,7 @@ def main():
 
     # not used for report
     if choice == "1":
-        colors = 28
+        colors = 50
         population_size = 50
         descent_cycles = 100
         start_time = time.time()

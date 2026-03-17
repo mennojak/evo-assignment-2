@@ -1,50 +1,98 @@
 from models.solution import Solution
 from models.vertex import Vertex
 import random
-import sys
 
-
-def local_search_vertex_descent(solution: Solution) -> Solution:
-    
+def local_search_vertex_descent(solution: Solution, descent_cycles: int = 100) -> Solution:
     vertices = solution.graph.vertices
+    num_colors = solution.colors
 
-    random.shuffle(vertices)
+    # Assign random colors only if needed
+    for v in vertices:
+        if v.color == -1:
+            v.color = random.randrange(num_colors)
 
-    for vertex in vertices:
+    color_costs_matrix = initialize_color_costs_matrix(vertices, num_colors)
 
-        if vertex.color == -1:
-            vertex.color = random.randint(0, solution.colors - 1)
-            continue
+    for cycle in range(descent_cycles):
+        improvement_made = False
 
-        if vertex.amount_of_conflicts == 0:
-            continue
+        for vertex in vertices:
+            current_color = vertex.color
+            current_cost = color_costs_matrix[vertex.id][current_color]
 
-        current_conflicts = vertex.amount_of_conflicts
+            best_color, best_cost = find_best_color(color_costs_matrix[vertex.id])
 
-        best_color, best_conflicts = get_color_with_minimal_conflicts(vertex, solution.colors)
+            if should_recolor(current_cost, best_cost):
+                recolor_vertex(vertex, best_color, color_costs_matrix)
 
-        if best_conflicts < current_conflicts or (best_conflicts == current_conflicts and random.random() < 0.5):
-            vertex.color = best_color
-            vertex.amount_of_conflicts = best_conflicts
-        else:
-            pass
+                if best_cost < current_cost:
+                    improvement_made = True  # mark that we improved
 
-    solution.update_conflicts_amount()
-    solution.graph.update_vertices_grouped_by_color()
+        # Early stop if no improvement in this cycle
+        if not improvement_made:
+            break
+
+    # Update global conflicts at the end
+    solution.conflicts_amount = count_total_conflicts(vertices)
     return solution
 
 
-def get_color_with_minimal_conflicts(vertex: Vertex, num_colors: int) -> tuple[int, int]:
-    neighbor_color_counts = [0 for _ in range(num_colors)]
-    
+def initialize_color_costs_matrix(vertices: list[Vertex], num_colors: int) -> dict[int, list[int]]:
+    color_costs_matrix = {v.id: [0] * num_colors for v in vertices}
+
+    for v in vertices:
+        for neighbor in v.neighbors:
+            if neighbor.color != -1:
+                color_costs_matrix[v.id][neighbor.color] += 1
+
+    return color_costs_matrix
+
+
+def find_best_color(cost_row: list[int]) -> tuple[int, int]:
+    min_cost = min(cost_row)
+
+    best_colors = [
+        color for color, cost in enumerate(cost_row)
+        if cost == min_cost
+    ]
+
+    return random.choice(best_colors), min_cost
+
+
+def should_recolor(current_cost: int, best_cost: int) -> bool:
+    if best_cost < current_cost:
+        return True
+
+    if best_cost == current_cost:
+        return random.random() < 0.1  # small randomness
+
+    return False
+
+
+def recolor_vertex(vertex: Vertex, new_color: int, color_costs: dict[int, list[int]]) -> None:
+    old_color = vertex.color
+
+    if old_color == new_color:
+        return
+
+    vertex.color = new_color
+
     for neighbor in vertex.neighbors:
-        if neighbor.color != -1:
-            neighbor_color_counts[neighbor.color] += 1
+        neighbor_costs = color_costs[neighbor.id]
 
-    min_conflicts = min(neighbor_color_counts)
+        # Neighbor no longer conflicts with old color
+        neighbor_costs[old_color] -= 1
 
-    best_colors = [color for color in range(num_colors) if neighbor_color_counts[color] == min_conflicts]
+        # Neighbor now conflicts with new color
+        neighbor_costs[new_color] += 1
 
-    chosen_color = random.choice(best_colors)
 
-    return chosen_color, min_conflicts
+def count_total_conflicts(vertices: list[Vertex]) -> int:
+    total = 0
+
+    for v in vertices:
+        for neighbor in v.neighbors:
+            if v.color == neighbor.color:
+                total += 1
+
+    return total // 2  # each edge counted twice
