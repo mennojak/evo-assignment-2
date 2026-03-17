@@ -6,29 +6,25 @@ import random
 def local_search_vertex_descent(solution: Solution) -> Solution:
     vertices = [v for v in solution.graph.vertices if v.amount_of_conflicts > 0]
 
-    improved = True
-    while improved:
-        improved = False
-        random.shuffle(vertices)
+    random.shuffle(vertices)
 
-        total_conflicts = 0
+    total_conflicts = 0
 
-        for vertex in vertices:
-            current_conflicts = count_conflicts(vertex, vertex.color)
-            best_color, best_conflicts = get_best_color(vertex, solution.colors)
+    for vertex in vertices:
+        current_conflicts = count_conflicts(vertex, vertex.color)
+        best_color, best_conflicts = get_best_color(vertex, solution.colors)
 
-            if best_conflicts < current_conflicts or (
-                best_conflicts == current_conflicts and random.random() < 0.5
-            ):
-                vertex.color = best_color
-                vertex.amount_of_conflicts = best_conflicts
-                improved = improved or (best_conflicts < current_conflicts)
-            else:
-                vertex.amount_of_conflicts = current_conflicts
+        if best_conflicts < current_conflicts or (
+            best_conflicts == current_conflicts and random.random() < 0.5
+        ):
+            vertex.color = best_color
+            vertex.amount_of_conflicts = best_conflicts
+        else:
+            vertex.amount_of_conflicts = current_conflicts
 
-            total_conflicts += vertex.amount_of_conflicts
+        total_conflicts += vertex.amount_of_conflicts
 
-        solution.conflicts_amount = total_conflicts
+    solution.conflicts_amount = total_conflicts
 
     return solution
 
