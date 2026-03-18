@@ -23,7 +23,7 @@ class EvaluationResult:
         plt.plot(generations, average_penalties, label='Average Penalty')
         plt.xlabel('Generation')
         plt.ylabel('Penalty')
-        plt.title('Genetic Algorithm Performance \n' + f'Experiment {self.experiment} - Colors: {self.colors} - Population Size: {self.population_size} - Descent Cycles: {self.descent_cycles}')
+        plt.title(f'Experiment {self.experiment} - Colors: {self.colors} - Population Size: {self.population_size} - Descent Cycles: {self.descent_cycles}')
         plt.legend()
         file_location = f"results/experiment={self.experiment}_colors={self.colors}_n={self.population_size}_L={self.descent_cycles}.png"
         plt.savefig(file_location)
