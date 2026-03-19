@@ -18,8 +18,8 @@ def main():
 
     if choice == "1":
         colors = int(input("Enter number of colors (minimum 26): "))
-        population_size = 20
-        descent_cycles = 20
+        population_size = 50
+        descent_cycles = 100
         max_generations = 100000
         start_time = time.time()
         best_solution, generation_results = genetic_local_search("data/flat300_26_0.col", colors, population_size, descent_cycles, max_generations)
@@ -42,6 +42,26 @@ def main():
         print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
         print(f"Amount of generations: {len(generation_results)}")
         evaluation = EvaluationResult(generation_results, 2, colors, population_size, descent_cycles)
+        evaluation.plot()
+
+    if choice == "3":
+        colors = int(input("Enter number of colors (minimum 26 or 83): "))
+        population_size = int(input("Enter population size (e.g. 20, 50, 100): "))
+        descent_cycles = int(input("Enter descent cycles (e.g. 20, 50, 100): "))
+        max_generations = 100000
+        graph = input("Choose graph: 'small' for flat300, 'large' for flat1000: ")
+        if graph == "small":
+            graph = "data/flat300_26_0.col"
+        elif graph == "large":
+            graph = "data/flat1000_76_0.col"
+
+        start_time = time.time()
+        best_solution, generation_results = genetic_local_search(graph, colors, population_size, descent_cycles, max_generations)
+        print("Best solution conflicts:", best_solution.conflicts_amount)
+        print("Average solution conflicts:", generation_results[-1].average_penalty)
+        print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
+        print(f"Amount of generations: {len(generation_results)}")
+        evaluation = EvaluationResult(generation_results, 1, colors, population_size, descent_cycles)
         evaluation.plot()
 
 if __name__ == "__main__":    
