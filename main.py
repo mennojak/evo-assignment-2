@@ -18,10 +18,11 @@ def main():
 
     if choice == "1":
         colors = int(input("Enter number of colors (minimum 26): "))
-        population_size = 50
-        descent_cycles = 100
+        population_size = 20
+        descent_cycles = 20
+        max_generations = 100000
         start_time = time.time()
-        best_solution, generation_results = genetic_local_search("data/flat300_26_0.col", colors, population_size, descent_cycles)
+        best_solution, generation_results = genetic_local_search("data/flat300_26_0.col", colors, population_size, descent_cycles, max_generations)
         print("Best solution conflicts:", best_solution.conflicts_amount)
         print("Average solution conflicts:", generation_results[-1].average_penalty)
         print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
@@ -31,15 +32,16 @@ def main():
 
     if choice == "2":
         colors = int(input("Enter number of colors (minimum 83): "))
-        population_size = 50
-        descent_cycles = 100
+        population_size = 100
+        descent_cycles = 200
+        max_generations = 25000
         start_time = time.time()
-        best_solution, generation_results = genetic_local_search("data/flat1000_76_0.col", colors, population_size, descent_cycles)
+        best_solution, generation_results = genetic_local_search("data/flat1000_76_0.col", colors, population_size, descent_cycles, max_generations)
         print("Best solution conflicts:", best_solution.conflicts_amount)
         print("Average solution conflicts:", generation_results[-1].average_penalty)
         print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
         print(f"Amount of generations: {len(generation_results)}")
-        evaluation = EvaluationResult(generation_results, 1, colors, population_size, descent_cycles)
+        evaluation = EvaluationResult(generation_results, 2, colors, population_size, descent_cycles)
         evaluation.plot()
 
 if __name__ == "__main__":    
