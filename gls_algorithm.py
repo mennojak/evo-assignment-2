@@ -66,6 +66,22 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
 
     return best_solution, generation_results
 
+def random_greedy_selection(population: list[Solution]) -> Solution:
+        parent1 = random.choice(population)
+        parent2 = random.choice(population)
+        child = greedy_partitioning_crossover(parent1, parent2)
+        return child
+
+def tournament_selection(Population: list[Solution], tournament_size: int = 10) -> Solution:
+
+    tournament_parent_one = random.sample(Population, min(tournament_size, len(Population)))
+    tournament_parent_two = random.sample(Population, min(tournament_size, len(Population)))
+
+    best_parent1 = min(tournament_parent_one, key=lambda s: s.conflicts_amount)
+    best_parent2 = min(tournament_parent_two, key=lambda s: s.conflicts_amount)
+
+    return greedy_partitioning_crossover(best_parent1, best_parent2)
+
 def greedy_partitioning_crossover(parent1: Solution, parent2: Solution) -> Solution:
     parent1_grouped_vertices_by_color: dict[int, list[int]] = copy_graph_vertices_grouped_by_color(parent1.graph)
     parent2_grouped_vertices_by_color: dict[int, list[int]] = copy_graph_vertices_grouped_by_color(parent2.graph)
