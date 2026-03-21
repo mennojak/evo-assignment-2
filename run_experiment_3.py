@@ -38,7 +38,7 @@ def run_all_hyperparameter_combinations(population_sizes: list[int], descent_cyc
     df = pd.DataFrame(rows)
     df = df.set_index(["population_size", "descent_cycles"])
 
-    df.to_csv("results/" + str(colors) + "_experiment_3_results.csv", sep=',')
+    df.to_csv("results/" + str(colors) + "_experiment_3_results.csv", sep=';')
 
     best_three_evaluations = sorted(
         evaluation_results,

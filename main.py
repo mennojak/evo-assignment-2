@@ -4,7 +4,8 @@ from gls_algorithm import genetic_local_search
 from evaluation import EvaluationResult
 import pandas as pd
 import matplotlib.pyplot as plt
-from run_experiment_3and4 import run_all_hyperparameter_combinations, run_some_hyperparameter_combinations_average, run_specific_hyperparameter_combinations 
+from run_experiment_3 import run_all_hyperparameter_combinations, run_some_hyperparameter_combinations_average, run_specific_hyperparameter_combinations
+from run_experiment_6 import run_specific_tournament_size, run_all_tournament_sizes, run_some_tournament_sizes_average
 
 def main():
     print("Select experiment:")
@@ -72,6 +73,33 @@ def main():
             population_sizes = [25, 50, 100, 200]
             descent_cycles_list = [25, 50, 100, 200]
             run_all_hyperparameter_combinations(population_sizes, descent_cycles_list, colors, graph, max_generations)
+
+    if choice == "6":
+        colors = int(input("Enter number of colors (minimum 26 or 83): "))
+        max_generations = 5000
+        graph = input("Choose graph: 'small' for flat300, 'large' for flat1000: ")
+        if graph == "small":
+            graph = "data/flat300_26_0.col"
+        elif graph == "large":
+            graph = "data/flat1000_76_0.col"
+
+        run_types = int(input("Choose run type (1 for specific, 2 for average, 3 for all): "))
+
+        
+        population_size = 50
+        descent_cycles = 50
+
+        if run_types == 1:
+            tournament_size = int(input("Enter tournament size (e.g. 2, 4, 8, 16): "))
+            run_specific_tournament_size(graph, colors, tournament_size, population_size, descent_cycles, max_generations)
+        elif run_types == 2:
+            tournament_sizes_string = input("Enter tournament sizes as comma separated values (e.g. 2,4,8,16): ")
+            tournament_sizes = list(map(int, tournament_sizes_string.split(",")))
+            run_some_tournament_sizes_average(graph, colors, population_size, descent_cycles, max_generations, tournament_sizes, runs_amount=5)
+        elif run_types == 3:
+            tournament_sizes_string = input("Enter tournament sizes as comma separated values (e.g. 2,4,8,16): ")
+            tournament_sizes = list(map(int, tournament_sizes_string.split(",")))
+            run_all_tournament_sizes(graph, colors, population_size, descent_cycles, max_generations, tournament_sizes)
 
 if __name__ == "__main__":    
     main()
