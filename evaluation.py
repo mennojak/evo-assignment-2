@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import csv
 
 class GenerationResult:
     def __init__(self, generation_number : int, best_penalty: float, average_penalty: float):
@@ -28,3 +29,18 @@ class EvaluationResult:
         file_location = f"results/experiment={self.experiment}_colors={self.colors}_n={self.population_size}_L={self.descent_cycles}.png"
         plt.savefig(file_location)
         plt.show()
+
+
+    def save_to_csv(self):
+        file_location = f"results/experiment={self.experiment}_colors={self.colors}_n={self.population_size}_L={self.descent_cycles}.csv"
+
+        with open(file_location, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["generation", "best_penalty", "average_penalty"])
+
+            for result in self.generation_results:
+                writer.writerow([
+                    result.generation_number,
+                    result.best_penalty,
+                    result.average_penalty
+                ])
