@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import time
 import csv
 
 class GenerationResult:
@@ -8,12 +9,13 @@ class GenerationResult:
         self.average_penalty = average_penalty
 
 class EvaluationResult:
-    def __init__(self, generation_results: list[GenerationResult], experiment: int, colors: int, population_size: int, descent_cycles: int):
+    def __init__(self, generation_results: list[GenerationResult], experiment: int, colors: int, population_size: int, descent_cycles: int, time: time = None):
         self.generation_results = generation_results
         self.experiment = experiment
         self.colors = colors
         self.population_size = population_size
         self.descent_cycles = descent_cycles
+        self.time = time
 
     def plot(self):
         generations = [result.generation_number for result in self.generation_results]

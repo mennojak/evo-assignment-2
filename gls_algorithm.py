@@ -8,7 +8,7 @@ from utils import copy_graph_vertices_grouped_by_color, create_copy_of_vertices
 from evaluation import GenerationResult
 import random
 
-def genetic_local_search(graph_name: str, colors: int, population_size: int, descent_cycles: int, max_generations: int) -> tuple[Solution, list[GenerationResult]]:
+def genetic_local_search(graph_name: str, colors: int, population_size: int, descent_cycles: int, max_generations: int, tournament_selection_on: bool = False, tournament_size: int = 10) -> tuple[Solution, list[GenerationResult]]:
     
     best_solution = None
     generation_results: list[GenerationResult] = []
@@ -30,10 +30,12 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
         if best_solution and optimal_solution_found(best_solution):
             break
 
-        # Greedy Partitioning Crossover
-        parent1 = random.choice(population)
-        parent2 = random.choice(population)
-        child = greedy_partitioning_crossover(parent1, parent2)
+        child = None
+
+        if tournament_selection_on:
+            child = tournament_selection(population, tournament_size)
+        else:
+            child = random_greedy_selection(population)
 
         # Vertex descent
         # descent_cycles_ran = 0
@@ -65,6 +67,22 @@ def genetic_local_search(graph_name: str, colors: int, population_size: int, des
             print(f"Generation: {generation} - Best solution: {best_solution.conflicts_amount} - Average solution: {generation_result.average_penalty}")
 
     return best_solution, generation_results
+
+def random_greedy_selection(population: list[Solution]) -> Solution:
+        parent1 = random.choice(population)
+        parent2 = random.choice(population)
+        child = greedy_partitioning_crossover(parent1, parent2)
+        return child
+
+def tournament_selection(Population: list[Solution], tournament_size: int = 10) -> Solution:
+
+    tournament_parent_one = random.sample(Population, tournament_size)
+    tournament_parent_two = random.sample(Population, tournament_size)
+
+    best_parent1 = min(tournament_parent_one, key=lambda s: s.conflicts_amount)
+    best_parent2 = min(tournament_parent_two, key=lambda s: s.conflicts_amount)
+
+    return greedy_partitioning_crossover(best_parent1, best_parent2)
 
 def greedy_partitioning_crossover(parent1: Solution, parent2: Solution) -> Solution:
     parent1_grouped_vertices_by_color: dict[int, list[int]] = copy_graph_vertices_grouped_by_color(parent1.graph)
