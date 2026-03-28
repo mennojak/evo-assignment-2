@@ -6,16 +6,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from run_experiment_3 import run_all_hyperparameter_combinations, run_some_hyperparameter_combinations_average, run_specific_hyperparameter_combinations
 from run_experiment_6 import run_specific_tournament_size, run_all_tournament_sizes, run_some_tournament_sizes_average
+from ils_algorithm import compare_gls_ils, iterated_local_search
 
 def main():
     print("Select experiment:")
     print("1 - flat300 with 26+ colors- section 2")
     print("2 - flat1000 with 83+ colors - section 3")
     print("3 - flat300 with 26+ and flat1000 with 83+ colors varying population size and descent cycles - section 4.1")
-    print("4 - flat300 with 26+ colors test ILS using Vertex descent - section 4.3")
-    print("5 - flat1000 with 83+ colors test ILS using Vertex descent (only if experiment 5 successful) - section 4.3")
-    print("6 - Custom experiment: TBD - section 4.4")
-
+    print("5 - flat300 with 26+ colors test ILS using Vertex descent - section 4.3")
+    print("6 - flat1000 with 83+ colors test ILS using Vertex descent (only if experiment 5 successful) - section 4.3")
+    print("4 - Custom experiment: TBD - section 4.4")
+    print("8 - Compare GLS vs ILS")
 
     choice = input("Enter 1-9: ")
 
@@ -74,7 +75,7 @@ def main():
             descent_cycles_list = [25, 50, 100, 200]
             run_all_hyperparameter_combinations(population_sizes, descent_cycles_list, colors, graph, max_generations)
 
-    if choice == "6":
+    if choice == "4":
         colors = int(input("Enter number of colors (minimum 26 or 83): "))
         max_generations = 5000
         graph = input("Choose graph: 'small' for flat300, 'large' for flat1000: ")
@@ -100,6 +101,106 @@ def main():
             tournament_sizes_string = input("Enter tournament sizes as comma separated values (e.g. 2,4,8,16): ")
             tournament_sizes = list(map(int, tournament_sizes_string.split(",")))
             run_all_tournament_sizes(graph, colors, population_size, descent_cycles, max_generations, tournament_sizes)
+
+    if choice == "5":
+        print("Testing ILS using Vertex descent on flat300 with 26+ colors...")
+        colors = int(input("Enter number of colors (minimum 26): "))
+
+        start_time = time.time()
+
+        best, generation_results = iterated_local_search(
+            "data/flat300_26_0.col",
+            colors,
+            descent_cycles=100,
+            max_iterations=5000,
+            perturbation_strength=5
+        )
+
+        print("Best solution conflicts:", best.conflicts_amount)
+        print("Final conflicts:", generation_results[-1].average_penalty)
+        print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
+        print(f"Iterations: {len(generation_results)}")
+
+        evaluation = EvaluationResult(
+            generation_results,
+            experiment=5,
+            colors=colors,
+            population_size=1,   # important: ILS has no population
+            descent_cycles=100
+        )
+
+        evaluation.plot()
+        evaluation.save_to_csv()
+
+        print("Best solution conflicts:", best.conflicts_amount)
+
+    if choice == "6":
+        print("Testing ILS using Vertex descent on flat1000 with 83+ colors...")
+        colors = int(input("Enter number of colors (minimum 83): "))
+
+        start_time = time.time()
+
+        best, generation_results = iterated_local_search(
+            "data/flat1000_76_0.col",
+            colors,
+            descent_cycles=200,
+            max_iterations=5000,
+            perturbation_strength=10
+        )
+
+        print("Best solution conflicts:", best.conflicts_amount)
+        print("Final conflicts:", generation_results[-1].average_penalty)
+        print(f"Evaluation time: {time.time() - start_time:.2f} seconds")
+        print(f"Iterations: {len(generation_results)}")
+
+        evaluation = EvaluationResult(
+            generation_results,
+            experiment=5,
+            colors=colors,
+            population_size=1,   
+            descent_cycles=100
+        )
+
+        evaluation.plot()
+        evaluation.save_to_csv()
+
+        print("Best solution conflicts:", best.conflicts_amount)
+
+        print("Best solution conflicts:", best.conflicts_amount)
+
+    if choice == "8":
+        print("Compare GLS vs ILS")
+
+        colors = int(input("Enter number of colors: "))
+        runs = int(input("Enter number of runs (e.g. 5 or 10): "))
+
+        graph = input("Choose graph: 'small' or 'large': ")
+        if graph == "small":
+            graph_name = "data/flat300_26_0.col"
+            population_size = 50
+            descent_cycles = 100
+            max_generations = 5000
+            ils_iterations = 5000
+            perturbation_strength = 5
+        else:
+            graph_name = "data/flat1000_76_0.col"
+            population_size = 100
+            descent_cycles = 200
+            max_generations = 5000
+            ils_iterations = 5000
+            perturbation_strength = 10
+
+        compare_gls_ils(
+            graph_name=graph_name,
+            colors=colors,
+            runs=runs,
+            population_size=population_size,
+            descent_cycles=descent_cycles,
+            max_generations=max_generations,
+            ils_iterations=ils_iterations,
+            perturbation_strength=perturbation_strength,
+            experiment_name=graph
+        )
 
 if __name__ == "__main__":    
     main()
