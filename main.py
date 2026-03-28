@@ -1,9 +1,6 @@
 import time
-from models.graph import Graph 
 from gls_algorithm import genetic_local_search
 from evaluation import EvaluationResult
-import pandas as pd
-import matplotlib.pyplot as plt
 from run_experiment_3 import run_all_hyperparameter_combinations, run_some_hyperparameter_combinations_average, run_specific_hyperparameter_combinations
 from run_experiment_6 import run_specific_tournament_size, run_all_tournament_sizes, run_some_tournament_sizes_average
 from ils_algorithm import compare_gls_ils, iterated_local_search
@@ -13,12 +10,12 @@ def main():
     print("1 - flat300 with 26+ colors- section 2")
     print("2 - flat1000 with 83+ colors - section 3")
     print("3 - flat300 with 26+ and flat1000 with 83+ colors varying population size and descent cycles - section 4.1")
+    print("4 - Custom experiment: TBD - section 4.4")
     print("5 - flat300 with 26+ colors test ILS using Vertex descent - section 4.3")
     print("6 - flat1000 with 83+ colors test ILS using Vertex descent (only if experiment 5 successful) - section 4.3")
-    print("4 - Custom experiment: TBD - section 4.4")
     print("8 - Compare GLS vs ILS")
 
-    choice = input("Enter 1-9: ")
+    choice = input("Enter 1-8: ")
 
     if choice == "1":
         colors = int(input("Enter number of colors (minimum 26): "))
